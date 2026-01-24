@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Calculates the shape of a matrix represented as nested lists"""
-
 def matrix_shape(matrix):
-    """Returns the shape of the matrix as a list of integers"""
+    """RETURN SHAPE 
+    """
     shape = []
     while isinstance(matrix, list):
         shape.append(len(matrix))
