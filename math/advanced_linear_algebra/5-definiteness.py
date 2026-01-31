@@ -10,47 +10,39 @@ def definiteness(matrix):
         matrix (numpy.ndarray): A square matrix of shape (n, n).
 
     Returns:
-        str: A string describing the definiteness, or None if invalid.
+        str: A string describing the definiteness.
     """
     if not isinstance(matrix, np.ndarray):
         return "matrix must be a numpy.ndarray"
 
-    # Check if matrix is valid (2D, square, non-empty)
-    if matrix.size == 0 or len(matrix.shape) != 2:
-        return None
+    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
+        return "matrix must be a square matrix"
 
-    n = matrix.shape[0]
-    if matrix.shape[1] != n or n == 0:
-        return None
+    if matrix.size == 0:
+        return "matrix must be a square matrix"
 
-    # Check if matrix is symmetric
     if not np.allclose(matrix, matrix.T):
-        return None
+        return "matrix must be symmetric"
 
-    # Calculate eigenvalues
     eigenvalues = np.linalg.eigvals(matrix)
-
-    # Make eigenvalues real (ignore negligible imaginary parts)
     eigenvalues = np.real(eigenvalues)
 
-    # Use a small tolerance for numerical stability
     tol = 1e-10
 
-    # Count positive, negative, and near-zero eigenvalues
     positive = np.sum(eigenvalues > tol)
     negative = np.sum(eigenvalues < -tol)
     zero = np.sum(np.abs(eigenvalues) <= tol)
+    n = matrix.shape[0]
 
-    # Determine definiteness
-    if negative == 0 and positive == n:
+    if positive == n:
         return "Positive definite"
-    elif negative == 0 and positive > 0 and zero > 0:
+    if positive > 0 and zero > 0 and negative == 0:
         return "Positive semi-definite"
-    elif positive == 0 and negative == n:
+    if negative == n:
         return "Negative definite"
-    elif positive == 0 and negative > 0 and zero > 0:
+    if negative > 0 and zero > 0 and positive == 0:
         return "Negative semi-definite"
-    elif positive > 0 and negative > 0:
+    if positive > 0 and negative > 0:
         return "Indefinite"
 
     return None
