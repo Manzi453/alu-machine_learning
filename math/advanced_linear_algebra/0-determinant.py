@@ -23,12 +23,12 @@ def determinant(matrix):
 
     if n == 0:
         return 1
-    
-    if any(len(row) != n for row in matrix):
-        raise ValueError("matrix must be a square matrix")
 
     if n == 1:
-        return matrix[0][0]
+        return matrix[0][0] if matrix and matrix[0] else 1
+
+    if any(len(row) != n for row in matrix):
+        raise ValueError("matrix must be a square matrix")
 
     if n == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
