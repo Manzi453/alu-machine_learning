@@ -13,7 +13,7 @@ def definiteness(matrix):
         str: A string describing the definiteness, or None if invalid.
     """
     if not isinstance(matrix, np.ndarray):
-        return None
+        return "matrix must be a numpy.ndarray"
 
     # Check if matrix is valid (2D, square, non-empty)
     if matrix.size == 0 or len(matrix.shape) != 2:
