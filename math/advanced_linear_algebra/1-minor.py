@@ -29,7 +29,9 @@ def minor(matrix):
     for i in range(n):
         minor_row = []
         for j in range(n):
-            minor_ij = [row[:j] + row[j+1:] for k, row in enumerate(matrix) if k != i]
+            minor_ij = [
+                row[:j] + row[j+1:] for k, row in enumerate(matrix) if k != i
+            ]
             det_minor_ij = determinant(minor_ij)
             minor_row.append(det_minor_ij)
         minor_matrix.append(minor_row)
