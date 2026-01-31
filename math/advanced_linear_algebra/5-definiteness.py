@@ -1,50 +1,48 @@
 #!/usr/bin/env python3
-"""
-Defines function that calculates the definiteness of a matrix
-"""
-
-
+"""Module for calculating matrix definiteness."""
 import numpy as np
 
 
 def definiteness(matrix):
-    """
-    Calculates the definiteness of a matrix
+    """Calculates the definiteness of a matrix.
 
-    parameters:
-        matrix [numpy.ndarray of shape(n, n)]:
-            matrix whose definiteness should be calculated
+    Args:
+        matrix (numpy.ndarray): A square matrix of shape (n, n).
 
-    returns:
-        one of the following strings indicating definiteness or None:
-            "Positive definite"
-            "Positive semi-definite"
-            "Negative definite"
-            "Negative semi-definite"
-            "Indefinite"
+    Returns:
+        str: A string describing the definiteness.
     """
-    if type(matrix) is not np.ndarray:
-        raise TypeError("matrix must be a numpy.ndarray")
-    if len(matrix.shape) != 2 or matrix.shape[0] != matrix.shape[1] or \
-       np.array_equal(matrix, matrix.T) is False:
-        return None
-    positive = 0
-    negative = 0
-    zero = 0
-    eigenvalues = np.linalg.eig(matrix)[0]
-    for value in eigenvalues:
-        if value > 0:
-            positive += 1
-        if value < 0:
-            negative += 1
-        if value == 0 or value == 0.:
-            zero += 1
-    if positive and zero and negative == 0:
-        return ("Positive semi-definite")
-    elif negative and zero and positive == 0:
-        return ("Negative semi-definite")
-    elif positive and negative == 0:
-        return ("Positive definite")
-    elif negative and positive == 0:
-        return ("Negative definite")
-    return ("Indefinite")
+    if not isinstance(matrix, np.ndarray):
+        return "matrix must be a numpy.ndarray"
+
+    if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
+        return "matrix must be a square matrix"
+
+    if matrix.size == 0:
+        return "matrix must be a square matrix"
+
+    if not np.allclose(matrix, matrix.T):
+        return "matrix must be symmetric"
+
+    eigenvalues = np.linalg.eigvals(matrix)
+    eigenvalues = np.real(eigenvalues)
+
+    tol = 1e-10
+
+    positive = np.sum(eigenvalues > tol)
+    negative = np.sum(eigenvalues < -tol)
+    zero = np.sum(np.abs(eigenvalues) <= tol)
+    n = matrix.shape[0]
+
+    if positive == n:
+        return "Positive definite"
+    if positive > 0 and zero > 0 and negative == 0:
+        return "Positive semi-definite"
+    if negative == n:
+        return "Negative definite"
+    if negative > 0 and zero > 0 and positive == 0:
+        return "Negative semi-definite"
+    if positive > 0 and negative > 0:
+        return "Indefinite"
+
+    return None
