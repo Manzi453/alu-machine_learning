@@ -9,14 +9,11 @@ def definiteness(matrix):
     Args:
         matrix (numpy.ndarray): A square matrix of shape (n, n).
 
-    Raises:
-        TypeError: If matrix is not a numpy.ndarray.
-
     Returns:
         str: A string describing the definiteness, or None if invalid.
     """
     if not isinstance(matrix, np.ndarray):
-        raise TypeError("matrix must be a numpy.ndarray")
+        return None
 
     # Check if matrix is valid (2D, square, non-empty)
     if matrix.size == 0 or len(matrix.shape) != 2:
@@ -26,12 +23,12 @@ def definiteness(matrix):
     if matrix.shape[1] != n or n == 0:
         return None
 
+    # Check if matrix is symmetric
+    if not np.allclose(matrix, matrix.T):
+        return None
+
     # Calculate eigenvalues
     eigenvalues = np.linalg.eigvals(matrix)
-
-    # Check for complex eigenvalues (indicates non-symmetric matrix)
-    if np.any(np.iscomplex(eigenvalues)):
-        return None
 
     # Make eigenvalues real (ignore negligible imaginary parts)
     eigenvalues = np.real(eigenvalues)
