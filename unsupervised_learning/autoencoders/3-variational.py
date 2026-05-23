@@ -24,7 +24,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
                                        activation='relu')
         Y_prev = hidden_ly(Y_prev)
     z_mean = keras.layers.Dense(units=latent_dims, activation=None)(Y_prev)
-    z_log_sigma = keras.layers.Dense(units=latent_dims, activation=None)(Y_prev)
+    z_log_sigma = keras.layers.Dense(units=latent_dims,
+                                     activation=None)(Y_prev)
 
     def sampling(args):
         """Sampling similar points in latent space"""
@@ -51,7 +52,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     output = last_ly(Y_prev)
     decoder = keras.Model(X_decode, output)
 
-    e_output = encoder(X_input)[0]
+    e_output = encoder(X_input)[1]
     d_output = decoder(e_output)
     auto = keras.Model(X_input, d_output)
 
