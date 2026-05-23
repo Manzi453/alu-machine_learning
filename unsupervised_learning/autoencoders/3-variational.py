@@ -28,12 +28,10 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
                                      activation=None)(Y_prev)
 
     def sampling(args):
-        """Sampling similar points in latent space"""
-        z_m, z_stand_des = args
-        batch = keras.backend.shape(z_m)[0]
-        dim = keras.backend.int_shape(z_m)[1]
-        epsilon = keras.backend.random_normal(shape=(batch, dim))
-        return z_m + keras.backend.exp(z_stand_des / 2) * epsilon
+        """Reparameterization trick: sample z from q(z|x)"""
+        z_m, z_log_var = args
+        epsilon = keras.backend.random_normal(shape=keras.backend.shape(z_m))
+        return z_m + keras.backend.exp(z_log_var / 2) * epsilon
 
     z = keras.layers.Lambda(sampling)([z_mean, z_log_sigma])
     encoder = keras.Model(X_input, [z, z_mean, z_log_sigma])
@@ -54,6 +52,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     auto = keras.Model(X_input, d_output)
 
     def vae_loss(x, x_decoder_mean):
+        """Computes VAE loss: reconstruction + KL divergence"""
         x_loss = keras.backend.binary_crossentropy(x, x_decoder_mean)
         x_loss = keras.backend.sum(x_loss, axis=1)
         kl_loss = - 0.5 * keras.backend.sum(1 + z_log_sigma -
