@@ -30,10 +30,13 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     def sampling(args):
         """Reparameterization trick: sample z from q(z|x)"""
         z_m, z_log_var = args
-        epsilon = keras.backend.random_normal(shape=keras.backend.shape(z_m))
+        batch = keras.backend.shape(z_m)[0]
+        dim = keras.backend.int_shape(z_m)[1]
+        epsilon = keras.backend.random_normal(shape=(batch, dim))
         return z_m + keras.backend.exp(z_log_var / 2) * epsilon
 
-    z = keras.layers.Lambda(sampling)([z_mean, z_log_sigma])
+    z_layer = keras.layers.Lambda(sampling, output_shape=(latent_dims,))
+    z = z_layer([z_mean, z_log_sigma])
     encoder = keras.Model(X_input, [z, z_mean, z_log_sigma])
 
     X_decode = keras.Input(shape=(latent_dims,))
