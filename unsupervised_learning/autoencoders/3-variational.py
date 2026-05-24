@@ -55,9 +55,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     last = keras.layers.Dense(input_dims, activation='sigmoid')(decoded)
     decoder = keras.Model(inputs=input_decoder, outputs=last)
 
-    encoder_output = encoder(input_encoder)[0]
-    decoder_output = decoder(encoder_output)
-    auto = keras.Model(inputs=input_encoder, outputs=decoder_output)
+    auto = keras.Model(inputs=input_encoder, outputs=decoder(z))
 
     def vae_loss(x, x_decoded_mean):
         """variational autoencoder loss function"""
