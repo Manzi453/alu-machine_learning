@@ -32,13 +32,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     z_log_sigma = keras.layers.Dense(latent_dims, activation=None)(encoded)
 
     def sample_z(args):
-        """
-        Sampling function
-        """
+        """Reparameterization trick: sample z from q(z|x)"""
         mu, sigma = args
-        batch = keras.backend.shape(mu)[0]
-        dim = keras.backend.int_shape(mu)[1]
-        eps = keras.backend.random_normal(shape=(batch, dim))
+        eps = keras.backend.random_normal(shape=keras.backend.shape(mu))
         return mu + keras.backend.exp(sigma / 2) * eps
 
     z = keras.layers.Lambda(sample_z,
@@ -55,7 +51,9 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     last = keras.layers.Dense(input_dims, activation='sigmoid')(decoded)
     decoder = keras.Model(inputs=input_decoder, outputs=last)
 
-    auto = keras.Model(inputs=input_encoder, outputs=decoder(z))
+    encoder_output = encoder(input_encoder)
+    decoder_output = decoder(encoder_output[0])
+    auto = keras.Model(inputs=input_encoder, outputs=decoder_output)
 
     def vae_loss(x, x_decoded_mean):
         """variational autoencoder loss function"""
