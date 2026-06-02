@@ -47,13 +47,12 @@ class BayesianOptimization:
         Uses the Expected Improvement acquisition function
         Returns: X_next, EI
         """
-        mu, _ = self.gp.predict(self.gp.X)
         sample_mu, sigma = self.gp.predict(self.X_s)
 
         if self.minimize:
-            opt_mu = np.min(mu)
+            opt_mu = np.min(self.gp.Y)
         else:
-            opt_mu = np.max(mu)
+            opt_mu = np.max(self.gp.Y)
 
         imp = opt_mu - sample_mu - self.xsi
         Z = imp / sigma
