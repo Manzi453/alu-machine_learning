@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Training with RMSProp
+""" Training with momentum
 """
 
 import tensorflow as tf
@@ -16,10 +16,5 @@ def create_RMSProp_op(loss, alpha, beta2, epsilon):
         Returns: the RMSProp optimization operation
     """
 
-    optimizer = tf.compat.v1.train.RMSPropOptimizer(
-        alpha,
-        rho=beta2,
-        momentum=0.0,
-        epsilon=epsilon
-    )
+    optimizer = tf.train.RMSPropOptimizer(alpha, beta2, epsilon)
     return optimizer.minimize(loss)
