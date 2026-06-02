@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Creating a variational autoencoder"""
 
-import tensorflow.keras as keras
+from tensorflow import keras
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
