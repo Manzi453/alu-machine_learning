@@ -1,0 +1,6 @@
+#!/Users/manziivan453icloud.com/Downloads/Projects/IVAN/alu-machine_learning/supervised_learning/neural_style_transfer/venv/bin/python3.11
+import sys
+from pygments.cmdline import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())
