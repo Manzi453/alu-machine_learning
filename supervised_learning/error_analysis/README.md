@@ -1,1 +1,1 @@
-# Error Analysis
+Welcome to the Error analytical side of things in our Supervsed Learning Project for our ALU Machine Learning Intranet Track! 🚀 

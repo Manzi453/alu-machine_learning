@@ -1,0 +1,1 @@
+Welcome to the Recurrent Neural Network side of the Supervised Learning Project of the ALU Machine Learning Track, don't worry, in here, we actually remember things and can have longer memory without vanishing/exploding gradients via LSTMs and GRUs
