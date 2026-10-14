@@ -19,6 +19,7 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         - d no. of dimensions for each data point
     kmin: positive integer - the minimum no. of clusters
     kmax: positive integer - the maximum no. of clusters
+        (defaults to the number of data points if None)
     iterations: +ve(int) - max no. of iterations perfomed
 
     return:
@@ -31,6 +32,8 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         return None, None
     if not isinstance(kmin, int) or kmin <= 0:
         return None, None
+    if kmax is None:
+        kmax = X.shape[0]
     if not isinstance(kmax, int) or kmax <= 0:
         return None, None
     if kmin >= kmax:
@@ -43,6 +46,6 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         C, clss = kmeans(X, k, iterations)
         results.append((C, clss))
         if k == kmin:
-            var = variance(X, C)
-        d_vars.append(var - variance(X, C))
+            first = variance(X, C)
+        d_vars.append(first - variance(X, C))
     return results, d_vars
